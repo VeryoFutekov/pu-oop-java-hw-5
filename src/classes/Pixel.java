@@ -24,6 +24,18 @@ public class Pixel {
 
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public String getState() {
+        return state;
+    }
+
     private void fillTheFigure(Graphics g) {
         g.setColor(color);
         g.fillRect(x, y, Constants.PIXEL_SIZE, Constants.PIXEL_SIZE);
