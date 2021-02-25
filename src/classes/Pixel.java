@@ -36,12 +36,20 @@ public class Pixel {
         return state;
     }
 
+    /**
+     * fill figure
+     * @param g
+     */
     private void fillTheFigure(Graphics g) {
         g.setColor(color);
         g.fillRect(x, y, Constants.PIXEL_SIZE, Constants.PIXEL_SIZE);
 
     }
 
+    /**
+     * draw the figure
+     * @param g
+     */
     private void drawTheFigure(Graphics g) {
         g.setColor(Color.BLACK);
         g.drawRect(x, y, Constants.PIXEL_SIZE, Constants.PIXEL_SIZE);

@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Display extends JFrame implements MouseListener {
+    private Pixel[][] pixels = new Pixel[8][8];
+
 
     private String currentSerialNumber;
-    private Pixel[][] pixels = new Pixel[8][8];
     private int clickCounter=0;
     private Pixel currentPixel;
     private int totalClicks=0;
@@ -27,18 +28,20 @@ public class Display extends JFrame implements MouseListener {
 
     }
 
-    private void restart(){
-        this.startProgram();
-        this.repaint();
-    }
 
-
+    /**
+     * start of the game
+     */
     public void startProgram() {
+        phoneCounter+=1;
         generateRandomString();
         generatePixels();
         windowInit();
     }
 
+    /**
+     * window init
+     */
     private void windowInit() {
         super.setSize(800, 800);
         super.setVisible(true);
@@ -46,6 +49,9 @@ public class Display extends JFrame implements MouseListener {
         super.setTitle("Serial number: " + this.currentSerialNumber);
     }
 
+    /**
+     * generate random string
+     */
     private void generateRandomString() {
         Random random = new Random();
         String randomS = "bnlkds8720ds,aka";
@@ -58,6 +64,9 @@ public class Display extends JFrame implements MouseListener {
         this.currentSerialNumber = result;
     }
 
+    /**
+     * generate pixels
+     */
     private void generatePixels() {
         List<Color> colors = List.of(Color.GREEN, Color.BLUE, Color.RED);
         List<String> states = List.of("BURNED", "HALF BURNED", "HEALTHY");
@@ -85,6 +94,10 @@ public class Display extends JFrame implements MouseListener {
         }
     }
 
+    /**
+     * show status of the phone
+     * @param status status
+     */
     private void showStatusOfThePhone(String status) {
         JDialog dialog = new JDialog(this, true);
         dialog.add(new JLabel(String.format("The display phone is: %s", status)));
@@ -108,40 +121,65 @@ public class Display extends JFrame implements MouseListener {
 
             if (clickCounter == 3) {
                 totalClicks++;
-
-                if (currentPixel.getState().equals("HALF_BURNED") || currentPixel.getState().equals("BURNED")) {
+                if (currentPixel.getState().equals("HALF BURNED") || currentPixel.getState().equals("BURNED")) {
                     currentPixel.setColor(Color.BLACK);
                     burnedPixelCount++;
                     isBrokenThePhone();
                 }
+
+                isHealthyThePhone();
+                super.repaint();
             }
         }
-
-
     }
 
+    /**
+     * check for healthy phone
+     */
     private void isHealthyThePhone(){
         if(totalClicks==64){
             showStatusOfThePhone("healthy");
             this.healthyPhones.addData(currentSerialNumber);
-            this.restart();
+            this.nextPhone();
         }
 
     }
 
+    /**
+     * check for broken phone
+     */
     private void isBrokenThePhone() {
-        if (burnedPixelCount < 33) {
+        if (burnedPixelCount >31) {
             showStatusOfThePhone("broken");
             this.brokenPhones.addData(currentSerialNumber);
-            this.restart();
+            this.nextPhone();
         }
     }
 
-    private void endgame() {
-        if(phoneCounter==4){
+    /**
+     * switch next phone
+     */
+    private void nextPhone() {
+
+        if(phoneCounter==5){
             System.out.println(brokenPhones.toString());
             System.out.println(healthyPhones.toString());
+            System.exit(0);
         }
+
+        this.startProgram();
+        this.repaint();
+
+        resetStats();
+
+    }
+
+    /**
+     * reset status
+     */
+    private void resetStats(){
+        totalClicks=0;
+        burnedPixelCount=0;
     }
 
     @Override
